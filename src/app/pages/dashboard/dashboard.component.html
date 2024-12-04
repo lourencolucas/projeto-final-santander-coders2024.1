@@ -2,13 +2,13 @@
 
 <section class="bg-light py-5">
   <div class="container">
-    <!-- Título do Dashboard -->
+   
     <div class="text-center mb-4">
       <h2 class="display-4 text-primary">Dashboard de Consultas</h2>
       <p class="lead">Gerencie e acompanhe as consultas com facilidade e eficiência.</p>
     </div>
 
-    <!-- Formulário de Criação de Consulta -->
+    
     <div class="bg-white p-4 rounded-3 shadow-sm mb-4">
       <h3 class="text-center mb-4">Criar Nova Consulta</h3>
       <form (ngSubmit)="onCreateAppointment()">
@@ -38,7 +38,7 @@
       </form>
     </div>
 
-    <!-- Tabela de Consultas -->
+    
     <div class="table-responsive shadow-sm rounded-3 bg-white p-4">
       <table class="table table-hover">
         <thead>
@@ -55,29 +55,28 @@
           <tr *ngFor="let appointment of appointments">
             <td>{{ appointment.specialty }}</td>
             <td>{{ appointment.doctor }}</td>
-            <td>{{ appointment.date | date: 'shortDate' }}</td>
+            <td>{{ appointment.date | date: 'dd/MM/yyyy' }}</td>
             <td>{{ appointment.time }}</td>
             <td>
               <span [ngClass]="{
-                'text-success': appointment.status === 'Concluída',
-                'text-warning': appointment.status === 'Pendente',
-                'text-danger': appointment.status === 'Cancelada'
+                'text-success': appointment.status === 'DONE',
+                'text-warning': appointment.status === 'SCHEDULED',
+                'text-danger': appointment.status === 'CANCELED'
               }">
                 {{ appointment.status }}
               </span>
             </td>
             <td class="d-flex gap-2">
-              <!-- Botões de Ações -->
-              <button class="btn btn-success btn-sm" (click)="completeAppointment(appointment.id)">
+              <button *ngIf="isAdmin" class="btn btn-success btn-sm text-white" (click)="completeAppointment(appointment.id)">
                 Concluir
               </button>
-              <button class="btn btn-warning btn-sm" (click)="cancelAppointment(appointment.id)">
+              <button class="btn btn-warning btn-sm text-white" (click)="cancelAppointment(appointment.id)">
                 Cancelar
               </button>
-              <button *ngIf="isAdmin" class="btn btn-info btn-sm" (click)="selectAppointment(appointment)">
+              <button class="btn btn-info btn-sm text-white" (click)="selectAppointment(appointment)">
                 Editar
               </button>
-              <button *ngIf="isAdmin" class="btn btn-danger btn-sm" (click)="delete(appointment.id)">
+              <button *ngIf="isAdmin" class="btn btn-danger btn-sm text-white" (click)="delete(appointment.id)">
                 Excluir
               </button>
             </td>
