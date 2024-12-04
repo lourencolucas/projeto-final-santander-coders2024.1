@@ -43,26 +43,40 @@ export class DashboardComponent {
   }
 
   completeAppointment(id: string) {
-    this.appointmentService.completeAppointment(id).subscribe(() => {
-      alert('Consulta concluída com sucesso!');
-      this.fetchAppointments();
-    });
+    const appointment = this.appointments.find((a) => a.id === id);
+    if (appointment && appointment.status !== 'CANCELED') {
+      this.appointmentService.completeAppointment(id).subscribe(() => {
+        alert('Consulta concluída com sucesso!');
+        this.fetchAppointments();
+      });
+    } else {
+      alert('Não é possível concluir uma consulta cancelada.');
+    }
   }
 
   cancelAppointment(id: string) {
-    this.appointmentService.cancelAppointment(id).subscribe(() => {
-      alert('Consulta cancelada com sucesso!');
-      this.fetchAppointments();
-    });
+    const appointment = this.appointments.find((a) => a.id === id);
+    if (appointment && appointment.status !== 'DONE') {
+      this.appointmentService.cancelAppointment(id).subscribe(() => {
+        alert('Consulta cancelada com sucesso!');
+        this.fetchAppointments();
+      });
+    } else {
+      alert('Não é possível cancelar uma consulta concluída.');
+    }
   }
 
   editAppointment() {
     if (this.selectedAppointment) {
-      this.appointmentService.editAppointment(this.selectedAppointment.id, this.selectedAppointment).subscribe(() => {
-        alert('Consulta editada com sucesso!');
-        this.fetchAppointments();
-        this.selectedAppointment = null; // Limpa o formulário
-      });
+      if (this.selectedAppointment.status !== 'DONE' && this.selectedAppointment.status !== 'CANCELED') {
+        this.appointmentService.editAppointment(this.selectedAppointment.id, this.selectedAppointment).subscribe(() => {
+          alert('Consulta editada com sucesso!');
+          this.fetchAppointments();
+          this.selectedAppointment = null;
+        });
+      } else {
+        alert('Não é possível editar uma consulta concluída ou cancelada.');
+      }
     }
   }
 
