@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common'; // Necessário para standalone components
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -8,26 +8,34 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   selector: 'app-login',
   templateUrl: './login.component.html',
-  imports: [FormsModule, CommonModule, RouterModule], // Incluindo o FormsModule
+  styleUrls: ['./login.component.css'],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule],
 })
 export class LoginComponent {
-  email = '';
-  password = '';
-  errorMessage = ''; // Mensagem de erro
+  loginForm: FormGroup;
+  errorMessage = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {
+    this.loginForm = new FormGroup({
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required]),
+    });
+  }
 
   onLogin() {
-    this.authService.login(this.email, this.password).subscribe({
-      next: (response: any) => {
-        // Captura e armazena o token e a role
-        this.authService.setUserData(response.token, response.user.role); 
-        this.router.navigate(['/dashboard']); // Navega para o dashboard após o login
-      },
-      error: (err) => {
-        // Exibe mensagem de erro em caso de falha no login
-        this.errorMessage = 'Erro ao fazer login! Verifique suas credenciais.';
-      },
-    });
+    if (this.loginForm.valid) {
+      const { email, password } = this.loginForm.value;
+      this.authService.login(email, password).subscribe({
+        next: (response: any) => {
+          this.authService.setUserData(response.token, response.user.role);
+          this.router.navigate(['/dashboard']);
+        },
+        error: (err) => {
+          this.errorMessage = 'Erro ao fazer login! Verifique suas credenciais.';
+        },
+      });
+    } else {
+      this.errorMessage = 'Preencha todos os campos corretamente.';
+    }
   }
 }

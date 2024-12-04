@@ -5,7 +5,7 @@
         <div class="d-flex justify-content-center text-bg-primary">
           <div class="col-12 col-xl-9">
             <img
-              alt="BootstrapBrain Logo"
+              alt="Logo"
               class="mb-4 img-fluid rounded"
               height="30"
               loading="lazy"
@@ -54,7 +54,7 @@
               </div>
             </div>
 
-            <form (ngSubmit)="onLogin()">
+            <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
               <div class="row gy-3 overflow-hidden">
                 <div class="col-12">
                   <div class="form-floating mb-3">
@@ -62,12 +62,24 @@
                       type="email"
                       class="form-control"
                       id="email"
-                      name="email"
-                      [(ngModel)]="email"
+                      formControlName="email"
                       placeholder="name@example.com"
-                      required
                     />
                     <label class="form-label" for="email">Email</label>
+                    <div
+                      *ngIf="
+                        loginForm.get('email')?.invalid &&
+                        loginForm.get('email')?.touched
+                      "
+                    >
+                      <small
+                        *ngIf="loginForm.get('email')?.errors?.['required']"
+                        >O email é obrigatório.</small
+                      >
+                      <small *ngIf="loginForm.get('email')?.errors?.['email']"
+                        >Digite um email válido.</small
+                      >
+                    </div>
                   </div>
                 </div>
 
@@ -77,23 +89,36 @@
                       type="password"
                       class="form-control"
                       id="password"
-                      name="password"
-                      [(ngModel)]="password"
+                      formControlName="password"
                       placeholder="Password"
-                      required
                     />
                     <label class="form-label" for="password">Password</label>
+                    <div
+                      *ngIf="
+                        loginForm.get('password')?.invalid &&
+                        loginForm.get('password')?.touched
+                      "
+                    >
+                      <small>Senha é obrigatória.</small>
+                    </div>
                   </div>
                 </div>
+
                 <div class="col-12">
                   <div class="d-grid">
-                    <button type="submit" class="btn btn-lg btn-primary">
+                    <button
+                      type="submit"
+                      class="btn btn-lg btn-primary"
+                      [disabled]="loginForm.invalid"
+                    >
                       Login
                     </button>
                   </div>
                 </div>
               </div>
             </form>
+
+            <div *ngIf="errorMessage" class="error text-danger">{{ errorMessage }}</div>
           </div>
         </div>
       </div>

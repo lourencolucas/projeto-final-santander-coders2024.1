@@ -22,8 +22,8 @@ export class AuthService {
 
   setUserData(token: string, role: string) {
     localStorage.setItem('token', token);
-    localStorage.setItem('role', role); // Salva a role no localStorage
-    this.userRole.next(role); // Atualiza o BehaviorSubject
+    localStorage.setItem('role', role);
+    this.userRole.next(role);
   }
 
   getToken(): string | null {
@@ -36,7 +36,7 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem('token');
-    localStorage.removeItem('role'); // Remove a role também
+    localStorage.removeItem('role');
     this.userRole.next(null);
     this.router.navigate(['/login']);
   }
@@ -44,7 +44,7 @@ export class AuthService {
   loadUserRole() {
     const role = localStorage.getItem('role');
     if (role) {
-      this.userRole.next(role); // Carrega a role salva ao iniciar o app
+      this.userRole.next(role);
     }
   }
 }

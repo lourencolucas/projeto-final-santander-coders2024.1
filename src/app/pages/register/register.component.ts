@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
@@ -8,23 +8,32 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   selector: 'app-register',
   templateUrl: './register.component.html',
-  imports: [FormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule],
 })
 export class RegisterComponent {
-  name = '';
-  email = '';
-  password = '';
-  role = 'USER';
+  registerForm: FormGroup;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {
+    this.registerForm = new FormGroup({
+      name: new FormControl('', [Validators.required]),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+      role: new FormControl('USER', [Validators.required]),
+    });
+  }
 
   onRegister() {
-    this.authService.register(this.name, this.email, this.password, this.role).subscribe({
-      next: () => {
-        alert('Cadastro realizado com sucesso!');
-        this.router.navigate(['/login']);
-      },
-      error: (err) => alert('Erro ao realizar cadastro!'),
-    });
+    if (this.registerForm.valid) {
+      const { name, email, password, role } = this.registerForm.value; 
+      this.authService.register(name, email, password, role).subscribe({
+        next: () => {
+          alert('Cadastro realizado com sucesso!');
+          this.router.navigate(['/login']);
+        },
+        error: () => alert('Erro ao realizar cadastro!'),
+      });
+    } else {
+      alert('Preencha todos os campos corretamente!');
+    }
   }
 }
