@@ -14,6 +14,7 @@ export class DashboardComponent {
   appointments: any[] = [];
   isAdmin = false;
   selectedAppointment: any = null;
+  newAppointment = { specialty: '', doctor: '', date: '', time: '', obs: '' };
 
   constructor(private appointmentService: AppointmentService) {}
 
@@ -25,6 +26,19 @@ export class DashboardComponent {
   fetchAppointments() {
     this.appointmentService.getAppointments().subscribe((data: any) => {
       this.appointments = data;
+    });
+  }
+
+  onCreateAppointment() {
+    this.appointmentService.createAppointment(this.newAppointment).subscribe({
+      next: (response) => {
+        alert('Consulta criada com sucesso!');
+        this.fetchAppointments(); // Atualiza a lista de consultas
+        this.newAppointment = { specialty: '', doctor: '', date: '', time: '', obs: '' }; // Limpa os campos do formulário
+      },
+      error: (error) => {
+        alert('Erro ao criar a consulta!');
+      },
     });
   }
 
