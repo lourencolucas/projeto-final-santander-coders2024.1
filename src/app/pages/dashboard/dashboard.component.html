@@ -1,0 +1,65 @@
+<app-navbar></app-navbar>
+<div class="container mt-5">
+    <h2>Dashboard de Consultas</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Especialidade</th>
+          <th>Médico</th>
+          <th>Data</th>
+          <th>Hora</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let appointment of appointments">
+          <td>{{ appointment.specialty }}</td>
+          <td>{{ appointment.doctor }}</td>
+          <td>{{ appointment.date | date: 'shortDate' }}</td>
+          <td>{{ appointment.time }}</td>
+          <td>{{ appointment.status }}</td>
+          <td>
+            <button class="btn btn-success btn-sm" (click)="completeAppointment(appointment.id)">
+              Concluir
+            </button>
+            <button class="btn btn-warning btn-sm" (click)="cancelAppointment(appointment.id)">
+              Cancelar
+            </button>
+            <button *ngIf="isAdmin" class="btn btn-info btn-sm" (click)="selectAppointment(appointment)">
+              Editar
+            </button>
+            <button *ngIf="isAdmin" class="btn btn-danger btn-sm" (click)="delete(appointment.id)">
+              Excluir
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <!-- Formulário de Edição -->
+    <div *ngIf="selectedAppointment" class="mt-4">
+      <h3>Editar Consulta</h3>
+      <form (ngSubmit)="editAppointment()">
+        <div class="mb-3">
+          <label for="specialty" class="form-label">Especialidade</label>
+          <input id="specialty" type="text" class="form-control" [(ngModel)]="selectedAppointment.specialty" name="specialty" required />
+        </div>
+        <div class="mb-3">
+          <label for="doctor" class="form-label">Médico</label>
+          <input id="doctor" type="text" class="form-control" [(ngModel)]="selectedAppointment.doctor" name="doctor" required />
+        </div>
+        <div class="mb-3">
+          <label for="date" class="form-label">Data</label>
+          <input id="date" type="date" class="form-control" [(ngModel)]="selectedAppointment.date" name="date" required />
+        </div>
+        <div class="mb-3">
+          <label for="time" class="form-label">Hora</label>
+          <input id="time" type="time" class="form-control" [(ngModel)]="selectedAppointment.time" name="time" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+        <button type="button" class="btn btn-secondary" (click)="selectedAppointment = null">Cancelar</button>
+      </form>
+    </div>
+  </div>
+  
