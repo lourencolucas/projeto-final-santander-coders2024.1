@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';  // Necessário para usar a diretiva ngIf, entre outros.
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule],  // Incluindo o CommonModule
+  imports: [CommonModule],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
 })
