@@ -16,6 +16,10 @@ export class AppointmentService {
     });
   }
 
+  createAppointment(data: any): Observable<any> {
+    return this.http.post<any>(this.apiUrl, data, { headers: this.getHeaders() });
+  }
+
   completeAppointment(id: string): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/done/${id}`, {}, { headers: this.getHeaders() });
   }
