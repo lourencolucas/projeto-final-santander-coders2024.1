@@ -5,10 +5,12 @@ Este projeto é uma aplicação de gerenciamento de consultas médicas, desenvol
 ## 📌 Funcionalidades
 
 ### Usuários
+
 - **Cadastro de Usuário:** Registre-se como USER ou ADMIN.
 - **Login:** Autentique-se na aplicação para acessar o dashboard.
 
 ### Dashboard
+
 - **ADMIN:**
   - Visualizar todas as consultas agendadas.
   - Cancelar consultas.
@@ -19,6 +21,7 @@ Este projeto é uma aplicação de gerenciamento de consultas médicas, desenvol
   - Editar ou cancelar consultas.
 
 ### Regras de Negócio
+
 1. **Status das Consultas:**
    - `SCHEDULED`: Status padrão ao criar uma consulta.
    - `DONE`: Indica que a consulta foi concluída.
